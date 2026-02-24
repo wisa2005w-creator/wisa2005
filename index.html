@@ -1,0 +1,1198 @@
+<!doctype html>
+<html lang="th" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BLOOM - ร้านดอกไม้ออนไลน์</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&amp;family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      font-family: 'Prompt', 'Quicksand', sans-serif;
+    }
+    
+    .gradient-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.6;
+      animation: float 8s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-20px) scale(1.05); }
+    }
+    
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(255, 154, 162, 0.4); }
+      50% { box-shadow: 0 0 40px rgba(255, 154, 162, 0.6); }
+    }
+    
+    @keyframes bounce-subtle {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    
+    .animate-slide-up {
+      animation: slideUp 0.6s ease-out forwards;
+    }
+    
+    .animate-slide-up-delay-1 { animation-delay: 0.1s; opacity: 0; }
+    .animate-slide-up-delay-2 { animation-delay: 0.2s; opacity: 0; }
+    .animate-slide-up-delay-3 { animation-delay: 0.3s; opacity: 0; }
+    .animate-slide-up-delay-4 { animation-delay: 0.4s; opacity: 0; }
+    
+    .cta-button {
+      animation: pulse-glow 2s ease-in-out infinite, bounce-subtle 2s ease-in-out infinite;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-8px) scale(1.02);
+    }
+    
+    .tiktok-card:hover {
+      transform: scale(1.05) rotate(1deg);
+    }
+    
+    .nav-link {
+      position: relative;
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #FF9AA2, #FFB7B2);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    .page-section {
+      display: none;
+    }
+    
+    .page-section.active {
+      display: block;
+    }
+    
+    .glass-card {
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.7);
+    }
+    
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #FFF5F5;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #FF9AA2, #FFB7B2);
+      border-radius: 10px;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 1rem;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 1.5rem;
+      max-width: 500px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease-out;
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full w-full overflow-auto" style="background: linear-gradient(135deg, #FFF5F5 0%, #FFF0F5 50%, #F5F0FF 100%);"><!-- Floating Background Blobs -->
+  <div class="gradient-blob w-64 h-64 top-10 left-10 fixed" style="background: #FFB7B2; animation-delay: 0s;"></div>
+  <div class="gradient-blob w-48 h-48 top-1/3 right-20 fixed" style="background: #FFDAC1; animation-delay: 2s;"></div>
+  <div class="gradient-blob w-56 h-56 bottom-20 left-1/4 fixed" style="background: #E2F0CB; animation-delay: 4s;"></div>
+  <div class="gradient-blob w-40 h-40 bottom-1/3 right-1/3 fixed" style="background: #B5EAD7; animation-delay: 6s;"></div>
+  <div class="relative z-10 min-h-full"><!-- Navigation -->
+   <nav class="glass-card sticky top-0 z-50 border-b border-pink-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="flex items-center justify-between h-16"><!-- Logo -->
+      <div class="flex items-center gap-2 cursor-pointer" onclick="showPage('home')"><span class="text-3xl">🌸</span> <span id="nav-shop-name" class="text-2xl font-bold bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent">BLOOM</span>
+      </div><!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center gap-8"><button onclick="showPage('home')" class="nav-link text-gray-600 hover:text-pink-500 transition-colors font-medium" data-page="home">Home</button> <button onclick="showPage('shop')" class="nav-link text-gray-600 hover:text-pink-500 transition-colors font-medium" data-page="shop">Shop</button> <button onclick="showPage('howto')" class="nav-link text-gray-600 hover:text-pink-500 transition-colors font-medium" data-page="howto">How to Order</button> <button onclick="showPage('about')" class="nav-link text-gray-600 hover:text-pink-500 transition-colors font-medium" data-page="about">About Us</button> <button onclick="showPage('contact')" class="nav-link text-gray-600 hover:text-pink-500 transition-colors font-medium" data-page="contact">Contact</button> <button onclick="showPage('orders')" class="nav-link text-gray-600 hover:text-pink-500 transition-colors font-medium" data-page="orders">คำสั่งซื้อ</button> <button onclick="showCart()" class="relative p-2 hover:bg-pink-50 rounded-full transition-colors"> <span class="text-2xl">🛒</span> <span id="cart-badge" class="cart-badge hidden">0</span> </button>
+      </div><!-- Mobile Menu Button -->
+      <div class="flex md:hidden items-center gap-2"><button onclick="showCart()" class="relative p-2 hover:bg-pink-50 rounded-full transition-colors"> <span class="text-2xl">🛒</span> <span id="cart-badge-mobile" class="cart-badge hidden">0</span> </button> <button onclick="toggleMobileMenu()" class="p-2 rounded-lg hover:bg-pink-50 transition-colors">
+        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg></button>
+      </div>
+     </div><!-- Mobile Menu -->
+     <div id="mobile-menu" class="hidden md:hidden pb-4">
+      <div class="flex flex-col gap-2"><button onclick="showPage('home')" class="text-left px-4 py-2 rounded-lg hover:bg-pink-50 text-gray-600 font-medium">🏠 Home</button> <button onclick="showPage('shop')" class="text-left px-4 py-2 rounded-lg hover:bg-pink-50 text-gray-600 font-medium">🛍️ Shop</button> <button onclick="showPage('howto')" class="text-left px-4 py-2 rounded-lg hover:bg-pink-50 text-gray-600 font-medium">📋 How to Order</button> <button onclick="showPage('about')" class="text-left px-4 py-2 rounded-lg hover:bg-pink-50 text-gray-600 font-medium">💝 About Us</button> <button onclick="showPage('contact')" class="text-left px-4 py-2 rounded-lg hover:bg-pink-50 text-gray-600 font-medium">📞 Contact</button> <button onclick="showPage('orders')" class="text-left px-4 py-2 rounded-lg hover:bg-pink-50 text-gray-600 font-medium">📦 คำสั่งซื้อ</button>
+      </div>
+     </div>
+    </div>
+   </nav><!-- Cart Modal -->
+   <div id="cart-modal" class="modal-overlay hidden" onclick="closeCartIfOverlay(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+     <div class="sticky top-0 bg-white border-b border-gray-100 p-6 rounded-t-3xl">
+      <div class="flex items-center justify-between">
+       <h2 class="text-2xl font-bold text-gray-800">🛒 ตะกร้าสินค้า</h2><button onclick="closeCart()" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg></button>
+      </div>
+     </div>
+     <div id="cart-items" class="p-6"><!-- Cart items will be rendered here -->
+     </div>
+     <div id="cart-footer" class="sticky bottom-0 bg-white border-t border-gray-100 p-6 rounded-b-3xl"><!-- Cart footer will be rendered here -->
+     </div>
+    </div>
+   </div><!-- Checkout Modal -->
+   <div id="checkout-modal" class="modal-overlay hidden" onclick="closeCheckoutIfOverlay(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+     <div class="sticky top-0 bg-white border-b border-gray-100 p-6 rounded-t-3xl">
+      <div class="flex items-center justify-between">
+       <h2 class="text-2xl font-bold text-gray-800">📝 ข้อมูลการสั่งซื้อ</h2><button onclick="closeCheckout()" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg></button>
+      </div>
+     </div>
+     <form id="checkout-form" class="p-6 space-y-4">
+      <div><label for="customer-name" class="block text-sm font-medium text-gray-700 mb-1">ชื่อ-นามสกุล *</label> <input type="text" id="customer-name" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-pink-400 focus:ring-2 focus:ring-pink-100 outline-none transition-all" placeholder="ชื่อของคุณ">
+      </div>
+      <div><label for="customer-phone" class="block text-sm font-medium text-gray-700 mb-1">เบอร์โทรศัพท์ *</label> <input type="tel" id="customer-phone" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-pink-400 focus:ring-2 focus:ring-pink-100 outline-none transition-all" placeholder="08X-XXX-XXXX">
+      </div>
+      <div><label for="customer-address" class="block text-sm font-medium text-gray-700 mb-1">ที่อยู่จัดส่ง *</label> <textarea id="customer-address" required rows="3" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-pink-400 focus:ring-2 focus:ring-pink-100 outline-none transition-all resize-none" placeholder="บ้านเลขที่, ถนน, แขวง/ตำบล, เขต/อำเภอ, จังหวัด, รหัสไปรษณีย์"></textarea>
+      </div>
+      <div><label for="customer-note" class="block text-sm font-medium text-gray-700 mb-1">ข้อความในการ์ด / หมายเหตุ</label> <textarea id="customer-note" rows="2" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-pink-400 focus:ring-2 focus:ring-pink-100 outline-none transition-all resize-none" placeholder="ข้อความที่ต้องการให้ใส่ในการ์ด หรือหมายเหตุพิเศษ..."></textarea>
+      </div>
+      <div id="checkout-summary" class="bg-pink-50 rounded-xl p-4"><!-- Order summary will be rendered here -->
+      </div><button type="submit" id="submit-order-btn" class="w-full py-4 bg-gradient-to-r from-pink-400 to-rose-400 text-white font-semibold rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all duration-300"> ยืนยันคำสั่งซื้อ 💐 </button>
+     </form>
+    </div>
+   </div><!-- ==================== HOME PAGE ==================== -->
+   <section id="page-home" class="page-section active"><!-- Hero Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+     <div class="flex flex-col lg:flex-row items-center gap-12"><!-- Hero Text -->
+      <div class="flex-1 text-center lg:text-left">
+       <div class="animate-slide-up animate-slide-up-delay-1"><span class="inline-block px-4 py-1 rounded-full bg-gradient-to-r from-pink-100 to-rose-100 text-pink-600 text-sm font-medium mb-4"> ✨ ส่งฟรีทั่วกรุงเทพฯ </span>
+       </div>
+       <h1 id="hero-title" class="animate-slide-up animate-slide-up-delay-2 text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-800 leading-tight mb-4">ดอกไม้สดใส<br><span class="bg-gradient-to-r from-pink-400 via-rose-400 to-orange-300 bg-clip-text text-transparent">ส่งตรงถึงใจ</span></h1>
+       <p id="hero-subtitle" class="animate-slide-up animate-slide-up-delay-3 text-lg text-gray-500 mb-8 max-w-md mx-auto lg:mx-0">จัดช่อสวยๆ สไตล์ที่เป็นคุณ 💐 พร้อมส่งความรู้สึกดีๆ ให้คนพิเศษ</p>
+       <div class="animate-slide-up animate-slide-up-delay-4 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"><button id="cta-main" onclick="showPage('shop')" class="cta-button px-8 py-4 bg-gradient-to-r from-pink-400 to-rose-400 text-white font-semibold rounded-full text-lg shadow-lg hover:shadow-xl transition-all duration-300"> 🌷 สั่งซื้อดอกไม้ </button> <button onclick="scrollToSection('tiktok-section')" class="px-8 py-4 bg-white/80 backdrop-blur text-gray-700 font-medium rounded-full border-2 border-pink-200 hover:border-pink-400 hover:bg-pink-50 transition-all duration-300"> 📱 ดู TikTok </button>
+       </div>
+      </div><!-- Hero Visual -->
+      <div class="flex-1 relative">
+       <div class="flex-1 relative">
+ <div class="relative w-full max-w-lg mx-auto">
+  <div class="aspect-square rounded-3xl bg-gradient-to-br from-pink-100 via-rose-50 to-orange-50 p-8 shadow-2xl">
+   
+   <div class="w-full h-full rounded-2xl overflow-hidden shadow-inner" style="animation: float 6s ease-in-out infinite;">
+    <img src="b.png" class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
+          </div>
+         </div>
+        </div><!-- Floating Badges -->
+        <div class="absolute -top-4 -right-4 px-4 py-2 bg-white rounded-full shadow-lg flex items-center gap-2 animate-bounce" style="animation-duration: 2s;"><span class="text-yellow-500">⭐</span> <span class="font-semibold text-gray-700">4.9</span>
+        </div>
+        <div class="absolute -bottom-4 -left-4 px-4 py-2 bg-gradient-to-r from-green-100 to-emerald-100 rounded-full shadow-lg"><span class="text-green-600 font-medium">🚚 ส่งไว 2 ชม.</span>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div><!-- Best Sellers Section -->
+    <div class="bg-white/50 backdrop-blur py-16">
+     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12"><span class="text-pink-500 font-medium">🔥 HOT ITEMS</span>
+       <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mt-2">สินค้าขายดี</h2>
+       <p class="text-gray-500 mt-2">ช่อดอกไม้ยอดนิยมที่ทุกคนชื่นชอบ</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+       
+       <div class="product-card bg-white rounded-3xl p-4 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group">
+        <div class="aspect-square rounded-2xl bg-gray-100 mb-4 flex items-center justify-center relative overflow-hidden">
+         <img src="roes red.jpg" alt="กุหลาบแดง" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+         <div class="absolute top-3 left-3 px-2 py-1 bg-red-500 text-white text-xs font-bold rounded-full">
+          BEST
+         </div>
+        </div>
+        <h3 class="font-semibold text-gray-800 mb-1">ช่อกุหลาบแดง</h3>
+        <p class="text-sm text-gray-500 mb-2">Rose Bouquet Classic</p>
+        <div class="flex items-center justify-between"><span class="text-lg font-bold text-pink-500">฿299</span> <button onclick="addToCart('ช่อกุหลาบแดง', 299, '🌹')" class="p-2 rounded-full bg-pink-100 hover:bg-pink-200 transition-colors"> <span class="text-pink-500">🛒</span> </button>
+        </div>
+       </div>
+
+       <div class="product-card bg-white rounded-3xl p-4 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group">
+        <div class="aspect-square rounded-2xl bg-gray-100 mb-4 flex items-center justify-center relative overflow-hidden">
+         <img src="tiw.png" alt="ทิวลิปม่วง" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+         <div class="absolute top-3 left-3 px-2 py-1 bg-purple-500 text-white text-xs font-bold rounded-full">
+          NEW
+         </div>
+        </div>
+        <h3 class="font-semibold text-gray-800 mb-1">ช่อทิวลิปม่วง</h3>
+        <p class="text-sm text-gray-500 mb-2">Purple Tulip Dream</p>
+        <div class="flex items-center justify-between"><span class="text-lg font-bold text-pink-500">฿250</span> <button onclick="addToCart('ช่อทิวลิปม่วง', 250, '💜')" class="p-2 rounded-full bg-pink-100 hover:bg-pink-200 transition-colors"> <span class="text-pink-500">🛒</span> </button>
+        </div>
+       </div>
+
+       <div class="product-card bg-white rounded-3xl p-4 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group">
+        <div class="aspect-square rounded-2xl bg-gray-100 mb-4 flex items-center justify-center relative overflow-hidden">
+         <img src="sunwo.png" alt="ทานตะวัน" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+         </div>
+        <h3 class="font-semibold text-gray-800 mb-1">ช่อทานตะวัน</h3>
+        <p class="text-sm text-gray-500 mb-2">Sunshine Bouquet</p>
+        <div class="flex items-center justify-between"><span class="text-lg font-bold text-pink-500">฿350</span> <button onclick="addToCart('ช่อทานตะวัน', 350, '🌻')" class="p-2 rounded-full bg-pink-100 hover:bg-pink-200 transition-colors"> <span class="text-pink-500">🛒</span> </button>
+        </div>
+       </div>
+
+       <div class="product-card bg-white rounded-3xl p-4 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group">
+        <div class="aspect-square rounded-2xl bg-gray-100 mb-4 flex items-center justify-center relative overflow-hidden">
+         <img src="mini.jpg" alt="พวงกุญเเจ" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+         <div class="absolute top-3 left-3 px-2 py-1 bg-green-500 text-white text-xs font-bold rounded-full">
+          ECO
+         </div>
+        </div>
+        <h3 class="font-semibold text-gray-800 mb-1">พวงกุญเเจ</h3>
+        <p class="text-sm text-gray-500 mb-2">Minimal Sunflower Style</p>
+        <div class="flex items-center justify-between"><span class="text-lg font-bold text-pink-500">฿25</span> <button onclick="addToCart('พวงกุญเเจ', 25, '🌿')" class="p-2 rounded-full bg-pink-100 hover:bg-pink-200 transition-colors"> <span class="text-pink-500">🛒</span> </button>
+        </div>
+       </div>
+      </div>
+      <div class="text-center mt-10"><button onclick="showPage('shop')" class="px-8 py-3 bg-gradient-to-r from-pink-400 to-rose-400 text-white font-semibold rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"> ดูสินค้าทั้งหมด → </button>
+      </div>
+     </div>
+    </div><!-- TikTok Section -->
+    <div id="tiktok-section" class="py-16">
+     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+       <div class="inline-flex items-center gap-2 px-4 py-2 bg-black rounded-full text-white mb-4">
+        <svg class="w-5 h-5" viewbox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+        </svg><span class="font-bold">TikTok</span>
+       </div>
+       <h2 class="text-3xl sm:text-4xl font-bold text-gray-800">ติดตามเราบน TikTok</h2>
+       <p class="text-gray-500 mt-2">ดูไอเดียจัดดอกไม้สุดปัง! 🎬</p>
+      </div>
+      <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
+      
+        <div class="aspect-[9/16] rounded-md overflow-hidden bg-gray-200 relative group cursor-pointer border border-gray-100">
+          <video class="w-full h-full object-cover" autoplay loop muted playsinline>
+            <source src="sun.mp4" type="video/mp4">
+          </video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+          <div class="absolute bottom-1 left-1.5 text-white pointer-events-none">
+            <p class="text-[10px] font-medium leading-tight">พวงกุญเเจเดี่ยว</p>
+            <span class="text-[8px] opacity-80">❤️ 1.2K</span>
+          </div>
+        </div>
+
+        <div class="aspect-[9/16] rounded-md overflow-hidden bg-gray-200 relative group cursor-pointer border border-gray-100">
+          <video class="w-full h-full object-cover" autoplay loop muted playsinline>
+            <source src="sunw.mp4" type="video/mp4">
+          </video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+          <div class="absolute bottom-1 left-1.5 text-white pointer-events-none">
+            <p class="text-[10px] font-medium leading-tight">ช่อลวดนุ่มนิ่ม</p>
+            <span class="text-[8px] opacity-80">❤️ 890</span>
+          </div>
+        </div>
+
+        <div class="aspect-[9/16] rounded-md overflow-hidden bg-gray-200 relative group cursor-pointer border border-gray-100">
+          <video class="w-full h-full object-cover" autoplay loop muted playsinline>
+            <source src="rose.mp4" type="video/mp4">
+          </video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+          <div class="absolute bottom-1 left-1.5 text-white pointer-events-none">
+            <p class="text-[10px] font-medium leading-tight">กุหลาบเเดง!!</p>
+            <span class="text-[8px] opacity-80">❤️ 2.4K</span>
+          </div>
+        </div>
+
+        <div class="aspect-[9/16] rounded-md overflow-hidden bg-gray-200 relative group cursor-pointer border border-gray-100">
+          <video class="w-full h-full object-cover" autoplay loop muted playsinline>
+            <source src="pink.mp4" type="video/mp4">
+          </video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+          <div class="absolute bottom-1 left-1.5 text-white pointer-events-none">
+            <p class="text-[10px] font-medium leading-tight">กุหลาบชมพู!!</p>
+            <span class="text-[8px] opacity-80">❤️ 560</span>
+          </div>
+        </div>
+
+        <div class="aspect-[9/16] rounded-md overflow-hidden bg-gray-200 relative group cursor-pointer border border-gray-100">
+          <video class="w-full h-full object-cover" autoplay loop muted playsinline>
+            <source src="home.mp4" type="video/mp4">
+          </video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+          <div class="absolute bottom-1 left-1.5 text-white pointer-events-none">
+            <p class="text-[10px] font-medium leading-tight">น้องถาง!!</p>
+            <span class="text-[8px] opacity-80">❤️ 560</span>
+          </div>
+        </div>
+
+        <div class="aspect-[9/16] rounded-md overflow-hidden bg-gray-200 relative group cursor-pointer border border-gray-100">
+          <video class="w-full h-full object-cover" autoplay loop muted playsinline>
+            <source src="sunsu.mp4" type="video/mp4">
+          </video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+          <div class="absolute bottom-1 left-1.5 text-white pointer-events-none">
+            <p class="text-[10px] font-medium leading-tight">พวงกุญเเจ><!!</p>
+            <span class="text-[8px] opacity-80">❤️ 560</span>
+      </div>
+        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+         <div class="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center"><span class="text-pink-500 text-xl ml-1">▶</span>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="text-center mt-10"><a href="https://www.tiktok.com/@bandokmai.i" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-6 py-3 bg-black text-white font-semibold rounded-full hover:bg-gray-800 transition-colors">
+        <svg class="w-5 h-5" viewbox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+        </svg> Follow @bandokmai.i </a>
+      </div>
+     </div>
+    </div><!-- CTA Banner -->
+    <div class="bg-gradient-to-r from-pink-400 via-rose-400 to-orange-300 py-12">
+     <div class="max-w-4xl mx-auto px-4 text-center text-white">
+      <h2 class="text-2xl sm:text-3xl font-bold mb-4">พร้อมส่งความสุขให้คนพิเศษ? 💝</h2>
+      <p class="text-white/90 mb-6">สั่งวันนี้ รับส่วนลด 10% สำหรับลูกค้าใหม่!</p><button id="cta-banner" onclick="showPage('shop')" class="px-8 py-4 bg-white text-pink-500 font-bold rounded-full text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"> 🌷 สั่งซื้อดอกไม้เลย! </button>
+     </div>
+    </div>
+   </section><!-- ==================== SHOP PAGE ==================== -->
+   <section id="page-shop" class="page-section">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+     <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-800 mb-4">🛍️ Shop</h1>
+      <p class="text-gray-500">เลือกช่อดอกไม้ที่ใช่สำหรับคุณ</p>
+     </div><!-- Filter Tabs -->
+     <div class="flex flex-wrap justify-center gap-3 mb-10"><button class="px-5 py-2 bg-pink-500 text-white rounded-full font-medium transition-all">ทั้งหมด</button> <button class="px-5 py-2 bg-white text-gray-600 rounded-full font-medium hover:bg-pink-100 transition-all">กุหลาบ 🌹</button> <button class="px-5 py-2 bg-white text-gray-600 rounded-full font-medium hover:bg-pink-100 transition-all">ทิวลิป 🌷</button> <button class="px-5 py-2 bg-white text-gray-600 rounded-full font-medium hover:bg-pink-100 transition-all">ทานตะวัน 🌻</button> <button class="px-5 py-2 bg-white text-gray-600 rounded-full font-medium hover:bg-pink-100 transition-all">มินิมอล 🌿</button>
+     </div><!-- Products Grid -->
+     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+    <div class="product-card bg-white rounded-3xl p-4 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group">
+        <div class="aspect-square rounded-2xl bg-gray-100 mb-4 overflow-hidden relative">
+            <img src="roes red.jpg" alt="ช่อกุหลาบแดง" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+        </div>
+        <h3 class="font-semibold text-gray-800 mb-1">ช่อกุหลาบแดง Classic</h3>
+        <p class="text-sm text-gray-500 mb-3">10 ดอก พร้อมห่อสวย</p>
+        <div class="flex items-center justify-between">
+            <span class="text-xl font-bold text-pink-500">฿299</span>
+            <button onclick="addToCart('ช่อกุหลาบแดง Classic', 299, '🌹')" class="px-4 py-2 bg-pink-500 text-white rounded-full text-sm font-medium hover:bg-pink-600 transition-colors"> เพิ่มลงตะกร้า </button>
+        </div>
+    </div>
+
+    <div class="product-card bg-white rounded-3xl p-4 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group">
+        <div class="aspect-square rounded-2xl bg-gray-100 mb-4 overflow-hidden relative">
+            <img src="rosepink.jpg" alt="ช่อกุหลาบชมพู" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+        </div>
+        <h3 class="font-semibold text-gray-800 mb-1">ช่อกุหลาบชมพู Soft</h3>
+        <p class="text-sm text-gray-500 mb-3">10 ดอก สีหวานละมุน</p>
+        <div class="flex items-center justify-between">
+            <span class="text-xl font-bold text-pink-500">฿299</span>
+            <button onclick="addToCart('ช่อกุหลาบชมพู Soft', 299, '🌸')" class="px-4 py-2 bg-pink-500 text-white rounded-full text-sm font-medium hover:bg-pink-600 transition-colors"> เพิ่มลงตะกร้า </button>
+        </div>
+    </div>
+
+    <div class="product-card bg-white rounded-3xl p-4 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group">
+        <div class="aspect-square rounded-2xl bg-gray-100 mb-4 overflow-hidden relative">
+            <img src="tiw.png" alt="ช่อทิวลิปม่วง" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+        </div>
+        <h3 class="font-semibold text-gray-800 mb-1">ช่อทิวลิปม่วง Dream</h3>
+        <p class="text-sm text-gray-500 mb-3">น่ารักๆ</p>
+        <div class="flex items-center justify-between">
+            <span class="text-xl font-bold text-pink-500">฿250</span>
+            <button onclick="addToCart('ช่อทิวลิปม่วง Dream', 250, '🌷')" class="px-4 py-2 bg-pink-500 text-white rounded-full text-sm font-medium hover:bg-pink-600 transition-colors"> เพิ่มลงตะกร้า </button>
+        </div>
+    </div>
+
+    <div class="product-card bg-white rounded-3xl p-4 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group">
+        <div class="aspect-square rounded-2xl bg-gray-100 mb-4 overflow-hidden relative">
+            <img src="sunwo.png" alt="ช่อทานตะวัน" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+        </div>
+        <h3 class="font-semibold text-gray-800 mb-1">ช่อทานตะวัน Sunshine</h3>
+        <p class="text-sm text-gray-500 mb-3">5 ดอก พร้อมใบไม้ประดับ</p>
+        <div class="flex items-center justify-between">
+            <span class="text-xl font-bold text-pink-500">฿350</span>
+            <button onclick="addToCart('ช่อทานตะวัน Sunshine', 350, '🌻')" class="px-4 py-2 bg-pink-500 text-white rounded-full text-sm font-medium hover:bg-pink-600 transition-colors"> เพิ่มลงตะกร้า </button>
+        </div>
+    </div>
+
+    <div class="product-card bg-white rounded-3xl p-4 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group">
+        <div class="aspect-square rounded-2xl bg-gray-100 mb-4 overflow-hidden relative">
+            <img src="mini.jpg" alt="พวงกุญเเจ" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+        </div>
+        <h3 class="font-semibold text-gray-800 mb-1">พวงกุญเเจ Minimal</h3>
+        <p class="text-sm text-gray-500 mb-3">สไตล์เรียบง่าย มีคลาส</p>
+        <div class="flex items-center justify-between">
+            <span class="text-xl font-bold text-pink-500">฿25</span>
+            <button onclick="addToCart('พวงกุญเเจ Minimal', 25, '🌿')" class="px-4 py-2 bg-pink-500 text-white rounded-full text-sm font-medium hover:bg-pink-600 transition-colors"> เพิ่มลงตะกร้า </button>
+        </div>
+    </div>
+
+    <div class="product-card bg-white rounded-3xl p-4 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group">
+        <div class="aspect-square rounded-2xl bg-gray-100 mb-4 overflow-hidden relative">
+            <img src="1.jpg" alt="ดอกไม้จัดเอง" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+        </div>
+        <h3 class="font-semibold text-gray-800 mb-1">ดอกไม้จัดเอง</h3>
+        <p class="text-sm text-gray-500 mb-3">Mix ดอกไม้จัดเอง</p>
+        <div class="flex items-center justify-between">
+            <span class="text-xl font-bold text-pink-500">฿120</span>
+            <button onclick="addToCart('ดอกไม้จัดเอง', 120, '🤍')" class="px-4 py-2 bg-pink-500 text-white rounded-full text-sm font-medium hover:bg-pink-600 transition-colors"> เพิ่มลงตะกร้า </button>
+        </div>
+    </div>
+
+     </div>
+    </div>
+   </section><!-- ==================== HOW TO ORDER PAGE ==================== -->
+   <section id="page-howto" class="page-section">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+     <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-800 mb-4">📋 วิธีสั่งซื้อ</h1>
+      <p class="text-gray-500">ง่ายๆ แค่ 4 ขั้นตอน!</p>
+     </div>
+     <div class="space-y-6"><!-- Step 1 -->
+      <div class="bg-white rounded-3xl p-6 shadow-lg flex items-start gap-6">
+       <div class="w-16 h-16 bg-gradient-to-br from-pink-400 to-rose-400 rounded-2xl flex items-center justify-center flex-shrink-0"><span class="text-white text-2xl font-bold">1</span>
+       </div>
+       <div>
+        <h3 class="text-xl font-bold text-gray-800 mb-2">เลือกช่อดอกไม้ที่ชอบ 💐</h3>
+        <p class="text-gray-500">เลือกจากหน้า Shop แล้วกดเพิ่มลงตะกร้า คุณสามารถเลือกสินค้าได้หลายรายการ</p>
+       </div>
+      </div><!-- Step 2 -->
+      <div class="bg-white rounded-3xl p-6 shadow-lg flex items-start gap-6">
+       <div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-400 rounded-2xl flex items-center justify-center flex-shrink-0"><span class="text-white text-2xl font-bold">2</span>
+       </div>
+       <div>
+        <h3 class="text-xl font-bold text-gray-800 mb-2">แจ้งรายละเอียด 📝</h3>
+        <p class="text-gray-500">คลิกที่ตะกร้าสินค้า ตรวจสอบรายการ แล้วกรอกข้อมูลที่อยู่จัดส่งและข้อความในการ์ด (ถ้ามี)</p>
+       </div>
+      </div><!-- Step 3 -->
+      <div class="bg-white rounded-3xl p-6 shadow-lg flex items-start gap-6">
+       <div class="w-16 h-16 bg-gradient-to-br from-orange-400 to-yellow-400 rounded-2xl flex items-center justify-center flex-shrink-0"><span class="text-white text-2xl font-bold">3</span>
+       </div>
+       <div>
+        <h3 class="text-xl font-bold text-gray-800 mb-2">ยืนยันคำสั่งซื้อ 💳</h3>
+        <p class="text-gray-500">กดยืนยันคำสั่งซื้อ เราจะรับออเดอร์และติดต่อกลับเพื่อแจ้งช่องทางชำระเงิน</p>
+       </div>
+      </div><!-- Step 4 -->
+      <div class="bg-white rounded-3xl p-6 shadow-lg flex items-start gap-6">
+       <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-teal-400 rounded-2xl flex items-center justify-center flex-shrink-0"><span class="text-white text-2xl font-bold">4</span>
+       </div>
+       <div>
+        <h3 class="text-xl font-bold text-gray-800 mb-2">ติดตามสถานะ 🚚</h3>
+        <p class="text-gray-500">ตรวจสอบสถานะคำสั่งซื้อได้ที่เมนู "คำสั่งซื้อ" เราจัดส่งภายในกรุงเทพฯ และปริมณฑล ส่งฟรี!</p>
+       </div>
+      </div>
+     </div>
+     <div class="text-center mt-10"><button onclick="showPage('shop')" class="px-8 py-4 bg-gradient-to-r from-pink-400 to-rose-400 text-white font-semibold rounded-full text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"> 🛍️ เริ่มช้อปปิ้งเลย </button>
+     </div>
+    </div>
+   </section><!-- ==================== ABOUT US PAGE ==================== -->
+   <section id="page-about" class="page-section">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+     <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-800 mb-4">💝 About Us</h1>
+      <p class="text-gray-500">เรื่องราวของเรา</p>
+     </div>
+     <div class="bg-white rounded-3xl p-8 shadow-lg mb-8">
+      <div class="text-center mb-8"><span class="text-7xl">🌸</span>
+      </div>
+      <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">bandokmai.i - ดอกไม้ที่เล่าเรื่องราวของคุณ</h2>
+      <div class="space-y-4 text-gray-600 leading-relaxed">
+       <p>สวัสดีค่ะ!! เราคือ <strong class="text-pink-500">bandokmai.i</strong> ร้านดอกไม้ออนไลน์สไตล์มินิมอลที่เชื่อว่าดอกไม้ไม่ใช่แค่ของขวัญ แต่เป็นการส่งต่อความรู้สึกดีๆ ให้คนที่คุณรัก 💕</p>
+       <p>เราเริ่มต้นจากความรักในดอกไม้และความต้องการสร้างสรรค์ช่อดอกไม้ที่มีเอกลักษณ์ ไม่ซ้ำใคร เน้นความสวยงามแบบเรียบง่ายแต่มีชีวิตชีวา ✨</p>
+       <p>ทุกช่อดอกไม้ของเราจัดด้วยความใส่ใจ ใช้ดอกไม้สดใหม่จัดสรรมาอย่างดี พร้อมบริการจัดส่งที่รวดเร็วและปลอดภัย 🚚</p>
+      </div>
+     </div><!-- Values -->
+     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-white rounded-2xl p-6 shadow-lg text-center"><span class="text-4xl mb-4 block">🌱</span>
+       <h3 class="font-bold text-gray-800 mb-2">ดอกไม้สดใหม่</h3>
+       <p class="text-sm text-gray-500">คัดสรรดอกไม้คุณภาพ สดใหม่ทุกวัน</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-lg text-center"><span class="text-4xl mb-4 block">💖</span>
+       <h3 class="font-bold text-gray-800 mb-2">จัดด้วยใจ</h3>
+       <p class="text-sm text-gray-500">ทุกช่อจัดอย่างพิถีพิถัน ใส่ใจทุกรายละเอียด</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-lg text-center"><span class="text-4xl mb-4 block">⚡</span>
+       <h3 class="font-bold text-gray-800 mb-2">ส่งไว ส่งชัวร์</h3>
+       <p class="text-sm text-gray-500">จัดส่งรวดเร็ว ตรงเวลา ปลอดภัย</p>
+      </div>
+     </div>
+    </div>
+   </section><!-- ==================== CONTACT PAGE ==================== -->
+   <section id="page-contact" class="page-section">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+     <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-800 mb-4">📞 Contact Us</h1>
+      <p class="text-gray-500">ติดต่อเราได้ที่นี่</p>
+     </div><!-- Contact Cards -->
+     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"><!-- LINE -->
+      <div class="bg-white rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group">
+       <div class="flex items-start gap-4">
+        <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"><span class="text-3xl">💬</span>
+        </div>
+        <div class="flex-1">
+         <h3 class="text-xl font-bold text-gray-800 mb-2">LINE Official</h3>
+         <p class="text-gray-500 text-sm mb-3">แชทกับเราได้ตลอด 24/7</p><a href="https://line.me/ti/p/@bandokmai.i" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-medium"> <span>@bandokmai.i</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg></a>
+        </div>
+       </div>
+      </div><!-- Instagram -->
+      <div class="bg-white rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group">
+       <div class="flex items-start gap-4">
+        <div class="w-16 h-16 bg-gradient-to-br from-pink-400 via-rose-400 to-purple-500 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"><span class="text-3xl">📸</span>
+        </div>
+        <div class="flex-1">
+         <h3 class="text-xl font-bold text-gray-800 mb-2">Instagram</h3>
+         <p class="text-gray-500 text-sm mb-3">ดูผลงานและโปรโมชั่นล่าสุด</p><a href="https://www.instagram.com/bandokmai.i/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-pink-600 hover:text-pink-700 font-medium"> <span>@bandokmai.i</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg></a>
+        </div>
+       </div>
+      </div><!-- Phone -->
+      <div class="bg-white rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group">
+       <div class="flex items-start gap-4">
+        <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"><span class="text-3xl">📱</span>
+        </div>
+        <div class="flex-1">
+         <h3 class="text-xl font-bold text-gray-800 mb-2">โทรศัพท์</h3>
+         <p class="text-gray-500 text-sm mb-3">โทรสอบถามข้อมูลเพิ่มเติม</p><a href="tel:0925906191" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"> <span>092-590-6191</span> </a>
+        </div>
+       </div>
+      </div><!-- Email -->
+      <div class="bg-white rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group">
+       <div class="flex items-start gap-4">
+        <div class="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-400 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"><span class="text-3xl">✉️</span>
+        </div>
+        <div class="flex-1">
+         <h3 class="text-xl font-bold text-gray-800 mb-2">อีเมล</h3>
+         <p class="text-gray-500 text-sm mb-3">ส่งข้อความหาเราได้</p><a href="mailto:hello@bloomflower.com" class="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 font-medium"> <span>hello@bandokmai.i.com</span> </a>
+        </div>
+       </div>
+      </div>
+     </div><!-- Business Hours -->
+     <div class="bg-gradient-to-br from-pink-50 to-rose-50 rounded-3xl p-8 shadow-lg">
+      <div class="text-center mb-6"><span class="text-5xl mb-4 block">🕐</span>
+       <h2 class="text-2xl font-bold text-gray-800">เวลาทำการ</h2>
+      </div>
+      <div class="space-y-3 max-w-md mx-auto">
+       <div class="flex items-center justify-between py-2 border-b border-pink-100"><span class="text-gray-600 font-medium">จันทร์ - ศุกร์</span> <span class="text-gray-800 font-semibold">09:00 - 18:00 น.</span>
+       </div>
+       <div class="flex items-center justify-between py-2 border-b border-pink-100"><span class="text-gray-600 font-medium">เสาร์ - อาทิตย์</span> <span class="text-gray-800 font-semibold">10:00 - 17:00 น.</span>
+       </div>
+       <div class="flex items-center justify-between py-2"><span class="text-gray-600 font-medium">วันหยุดนักขัตฤกษ์</span> <span class="text-red-500 font-semibold">ปิดทำการ</span>
+       </div>
+      </div>
+      <p class="text-center text-gray-500 text-sm mt-6">💡 <strong>สั่งล่วงหน้า:</strong> เราแนะนำให้สั่งล่วงหน้าอย่างน้อย 5 วันสำหรับช่อพิเศษ</p>
+     </div>
+    </div>
+   </section><!-- ==================== ORDERS PAGE ==================== -->
+   <section id="page-orders" class="page-section">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+     <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-800 mb-4">📦 คำสั่งซื้อทั้งหมด</h1>
+      <p class="text-gray-500">ติดตามสถานะคำสั่งซื้อของคุณ</p>
+     </div>
+     <div id="orders-list" class="space-y-4"><!-- Orders will be rendered here -->
+     </div>
+     <div id="orders-empty" class="hidden text-center py-16"><span class="text-7xl mb-4 block">📭</span>
+      <p class="text-gray-500 text-lg mb-6">ยังไม่มีคำสั่งซื้อในขณะนี้</p><button onclick="showPage('shop')" class="px-6 py-3 bg-gradient-to-r from-pink-400 to-rose-400 text-white font-semibold rounded-full hover:shadow-lg transition-all"> เริ่มช้อปปิ้ง → </button>
+     </div>
+    </div>
+   </section><!-- Footer -->
+   <footer class="bg-white/80 backdrop-blur border-t border-pink-100 py-8 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2"><span class="text-2xl">🌸</span> <span id="footer-shop-name" class="text-xl font-bold text-gray-800">BLOOM</span>
+      </div>
+      <div class="flex items-center gap-6"><a href="https://www.instagram.com/bandokmai.i/" class="text-gray-500 hover:text-pink-500 transition-colors">📸 Instagram</a> <a href="#" class="text-gray-500 hover:text-pink-500 transition-colors">💬 LINE</a> <a href="https://www.tiktok.com/@bandokmai.i" class="text-gray-500 hover:text-pink-500 transition-colors">🎵 TikTok</a>
+      </div>
+      <p class="text-gray-400 text-sm">© 2026 bandokmai.i. Made with 💖</p>
+     </div>
+    </div>
+   </footer>
+  </div>
+  <script>
+    // Default configuration
+    const defaultConfig = {
+      shop_name: 'bandokmai.i',
+      hero_title: 'ดอกไม้สดใส ส่งตรงถึงใจ',
+      hero_subtitle: 'จัดช่อสวยๆ สไตล์ที่เป็นคุณ 💐 พร้อมส่งความรู้สึกดีๆ ให้คนพิเศษ',
+      cta_text: 'สั่งซื้อดอกไม้',
+      background_color: '#FFF5F5',
+      surface_color: '#FFFFFF',
+      text_color: '#1F2937',
+      primary_action_color: '#FB7185',
+      secondary_action_color: '#9CA3AF'
+    };
+
+    let config = { ...defaultConfig };
+    let cart = [];
+    let orders = [];
+
+    // Data SDK Handler
+    const dataHandler = {
+      onDataChanged(data) {
+        orders = data;
+        renderOrdersList();
+      }
+    };
+
+    // Initialize Data SDK
+    async function initDataSdk() {
+      if (window.dataSdk) {
+        const result = await window.dataSdk.init(dataHandler);
+        if (!result.isOk) {
+          console.error('Failed to initialize Data SDK');
+        }
+      }
+    }
+
+    // Cart Functions
+    function addToCart(productName, productPrice, productEmoji) {
+      const existingItem = cart.find(item => item.name === productName);
+      
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({
+          name: productName,
+          price: productPrice,
+          emoji: productEmoji,
+          quantity: 1
+        });
+      }
+      
+      updateCartBadge();
+      showToast(`${productEmoji} เพิ่ม "${productName}" ลงตะกร้าแล้ว!`);
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartBadge();
+      renderCart();
+    }
+
+    function updateQuantity(index, change) {
+      cart[index].quantity += change;
+      
+      if (cart[index].quantity <= 0) {
+        removeFromCart(index);
+      } else {
+        renderCart();
+      }
+    }
+
+    function updateCartBadge() {
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const badge = document.getElementById('cart-badge');
+      const badgeMobile = document.getElementById('cart-badge-mobile');
+      
+      if (totalItems > 0) {
+        badge.textContent = totalItems;
+        badge.classList.remove('hidden');
+        badgeMobile.textContent = totalItems;
+        badgeMobile.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+        badgeMobile.classList.add('hidden');
+      }
+    }
+
+    function showCart() {
+      renderCart();
+      document.getElementById('cart-modal').classList.remove('hidden');
+    }
+
+    function closeCart() {
+      document.getElementById('cart-modal').classList.add('hidden');
+    }
+
+    function closeCartIfOverlay(event) {
+      if (event.target.id === 'cart-modal') {
+        closeCart();
+      }
+    }
+
+    function renderCart() {
+      const cartItemsEl = document.getElementById('cart-items');
+      const cartFooterEl = document.getElementById('cart-footer');
+      
+      if (cart.length === 0) {
+        cartItemsEl.innerHTML = `
+          <div class="text-center py-12">
+            <span class="text-6xl mb-4 block">🛒</span>
+            <p class="text-gray-500 mb-4">ตะกร้าว่างเปล่า</p>
+            <button onclick="closeCart(); showPage('shop');" class="px-6 py-2 bg-pink-500 text-white rounded-full font-medium hover:bg-pink-600 transition-colors">
+              เริ่มช้อปปิ้ง
+            </button>
+          </div>
+        `;
+        cartFooterEl.innerHTML = '';
+        return;
+      }
+      
+      let cartHTML = '';
+      let total = 0;
+      
+      cart.forEach((item, index) => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        
+        cartHTML += `
+          <div class="bg-pink-50 rounded-2xl p-4 flex items-center gap-4">
+            <div class="w-16 h-16 bg-white rounded-xl flex items-center justify-center text-3xl flex-shrink-0">
+              ${item.emoji}
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="font-semibold text-gray-800 truncate">${item.name}</h3>
+              <p class="text-pink-500 font-medium">฿${item.price.toLocaleString()}</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="updateQuantity(${index}, -1)" class="w-8 h-8 bg-white rounded-full flex items-center justify-center hover:bg-pink-100 transition-colors">
+                <span class="text-gray-600">−</span>
+              </button>
+              <span class="w-8 text-center font-semibold">${item.quantity}</span>
+              <button onclick="updateQuantity(${index}, 1)" class="w-8 h-8 bg-white rounded-full flex items-center justify-center hover:bg-pink-100 transition-colors">
+                <span class="text-gray-600">+</span>
+              </button>
+            </div>
+            <button onclick="removeFromCart(${index})" class="p-2 hover:bg-white rounded-lg transition-colors">
+              <svg class="w-5 h-5 text-gray-400 hover:text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+        `;
+      });
+      
+      cartItemsEl.innerHTML = cartHTML;
+      
+      cartFooterEl.innerHTML = `
+        <div class="space-y-3">
+          <div class="flex items-center justify-between text-lg">
+            <span class="text-gray-600">ยอดรวม</span>
+            <span class="text-2xl font-bold text-pink-500">฿${total.toLocaleString()}</span>
+          </div>
+          <button onclick="proceedToCheckout()" class="w-full py-4 bg-gradient-to-r from-pink-400 to-rose-400 text-white font-semibold rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all duration-300">
+            ดำเนินการสั่งซื้อ →
+          </button>
+        </div>
+      `;
+    }
+
+    function proceedToCheckout() {
+      closeCart();
+      renderCheckoutSummary();
+      document.getElementById('checkout-modal').classList.remove('hidden');
+    }
+
+    function closeCheckout() {
+      document.getElementById('checkout-modal').classList.add('hidden');
+    }
+
+    function closeCheckoutIfOverlay(event) {
+      if (event.target.id === 'checkout-modal') {
+        closeCheckout();
+      }
+    }
+
+    function renderCheckoutSummary() {
+      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      const summaryEl = document.getElementById('checkout-summary');
+      
+      let itemsHTML = '';
+      cart.forEach(item => {
+        itemsHTML += `
+          <div class="flex items-center justify-between text-sm">
+            <span class="text-gray-600">${item.emoji} ${item.name} × ${item.quantity}</span>
+            <span class="font-medium">฿${(item.price * item.quantity).toLocaleString()}</span>
+          </div>
+        `;
+      });
+      
+      summaryEl.innerHTML = `
+        <h3 class="font-semibold text-gray-800 mb-3">สรุปคำสั่งซื้อ</h3>
+        <div class="space-y-2 mb-3">
+          ${itemsHTML}
+        </div>
+        <div class="border-t border-pink-200 pt-3 flex items-center justify-between">
+          <span class="font-semibold text-gray-800">ยอดรวมทั้งหมด</span>
+          <span class="text-xl font-bold text-pink-500">฿${total.toLocaleString()}</span>
+        </div>
+      `;
+    }
+
+    // Checkout Form Handler
+    document.getElementById('checkout-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      if (orders.length >= 999) {
+        showToast('⚠️ ถึงขีดจำกัดคำสั่งซื้อแล้ว กรุณาติดต่อเจ้าของร้าน', 'error');
+        return;
+      }
+      
+      const submitBtn = document.getElementById('submit-order-btn');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="animate-pulse">กำลังส่งคำสั่งซื้อ...</span>';
+      
+      const customerName = document.getElementById('customer-name').value;
+      const customerPhone = document.getElementById('customer-phone').value;
+      const customerAddress = document.getElementById('customer-address').value;
+      const customerNote = document.getElementById('customer-note').value;
+      
+      const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      const orderId = 'ORD' + Date.now();
+      
+      for (const item of cart) {
+        const orderData = {
+          order_id: orderId,
+          product_name: item.name,
+          product_price: item.price,
+          product_emoji: item.emoji,
+          quantity: item.quantity,
+          customer_name: customerName,
+          customer_phone: customerPhone,
+          customer_address: customerAddress,
+          customer_note: customerNote,
+          status: 'รอดำเนินการ',
+          created_at: new Date().toISOString(),
+          total_price: total
+        };
+        
+        const result = await window.dataSdk.create(orderData);
+        
+        if (!result.isOk) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = 'ยืนยันคำสั่งซื้อ 💐';
+          showToast('❌ เกิดข้อผิดพลาด กรุณาลองอีกครั้ง', 'error');
+          return;
+        }
+      }
+      
+      cart = [];
+      updateCartBadge();
+      
+      closeCheckout();
+      this.reset();
+      
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = 'ยืนยันคำสั่งซื้อ 💐';
+      
+      showToast('✅ สั่งซื้อสำเร็จ! ตรวจสอบสถานะได้ที่เมนู "คำสั่งซื้อ"');
+      
+      setTimeout(() => {
+        showPage('orders');
+      }, 2000);
+    });
+
+    // Render Orders List
+    function renderOrdersList() {
+      const ordersListEl = document.getElementById('orders-list');
+      const ordersEmptyEl = document.getElementById('orders-empty');
+      
+      if (orders.length === 0) {
+        ordersListEl.classList.add('hidden');
+        ordersEmptyEl.classList.remove('hidden');
+        return;
+      }
+      
+      ordersListEl.classList.remove('hidden');
+      ordersEmptyEl.classList.add('hidden');
+      
+      const groupedOrders = {};
+      orders.forEach(order => {
+        if (!groupedOrders[order.order_id]) {
+          groupedOrders[order.order_id] = {
+            order_id: order.order_id,
+            customer_name: order.customer_name,
+            customer_phone: order.customer_phone,
+            customer_address: order.customer_address,
+            customer_note: order.customer_note,
+            status: order.status,
+            created_at: order.created_at,
+            total_price: order.total_price,
+            items: []
+          };
+        }
+        
+        groupedOrders[order.order_id].items.push({
+          product_name: order.product_name,
+          product_emoji: order.product_emoji,
+          product_price: order.product_price,
+          quantity: order.quantity,
+          __backendId: order.__backendId
+        });
+      });
+      
+      const sortedOrders = Object.values(groupedOrders).sort((a, b) => 
+        new Date(b.created_at) - new Date(a.created_at)
+      );
+      
+      let ordersHTML = '';
+      
+      sortedOrders.forEach(order => {
+        const statusColors = {
+          'รอดำเนินการ': 'bg-yellow-100 text-yellow-700',
+          'กำลังจัดเตรียม': 'bg-blue-100 text-blue-700',
+          'กำลังจัดส่ง': 'bg-purple-100 text-purple-700',
+          'จัดส่งแล้ว': 'bg-green-100 text-green-700',
+          'ยกเลิก': 'bg-red-100 text-red-700'
+        };
+        
+        const statusColor = statusColors[order.status] || 'bg-gray-100 text-gray-700';
+        const date = new Date(order.created_at).toLocaleString('th-TH', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        
+        let itemsHTML = '';
+        order.items.forEach(item => {
+          itemsHTML += `
+            <div class="flex items-center gap-3 py-2 border-b border-gray-100 last:border-0">
+              <span class="text-2xl">${item.product_emoji}</span>
+              <div class="flex-1">
+                <p class="font-medium text-gray-800">${item.product_name}</p>
+                <p class="text-sm text-gray-500">฿${item.product_price.toLocaleString()} × ${item.quantity}</p>
+              </div>
+              <span class="font-semibold text-pink-500">฿${(item.product_price * item.quantity).toLocaleString()}</span>
+            </div>
+          `;
+        });
+        
+        ordersHTML += `
+          <div class="bg-white rounded-3xl p-6 shadow-lg">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 pb-4 border-b border-gray-100">
+              <div>
+                <h3 class="text-lg font-bold text-gray-800">คำสั่งซื้อ #${order.order_id}</h3>
+                <p class="text-sm text-gray-500">${date}</p>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="px-4 py-2 ${statusColor} rounded-full text-sm font-medium">
+                  ${order.status}
+                </span>
+              </div>
+            </div>
+            
+            <div class="mb-4">
+              ${itemsHTML}
+            </div>
+            
+            <div class="bg-pink-50 rounded-xl p-4 mb-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p class="text-gray-500 mb-1">ชื่อผู้สั่ง</p>
+                  <p class="font-medium text-gray-800">${order.customer_name}</p>
+                </div>
+                <div>
+                  <p class="text-gray-500 mb-1">เบอร์โทร</p>
+                  <p class="font-medium text-gray-800">${order.customer_phone}</p>
+                </div>
+                <div class="md:col-span-2">
+                  <p class="text-gray-500 mb-1">ที่อยู่จัดส่ง</p>
+                  <p class="font-medium text-gray-800">${order.customer_address}</p>
+                </div>
+                ${order.customer_note ? `
+                  <div class="md:col-span-2"<
+                    <p class="text-gray-500 mb-1">หมายเหตุ</p>
+                    <p class="font-medium text-gray-800">${order.customer_note}</p>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+            
+            <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+              <span class="text-gray-600 font-medium">ยอดรวมทั้งหมด</span>
+              <span class="text-2xl font-bold text-pink-500">฿${order.total_price.toLocaleString()}</span>
+            </div>
+          </div>
+        `;
+      });
+      
+      ordersListEl.innerHTML = ordersHTML;
+    }
+
+    // Toast Notification
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `fixed top-20 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 rounded-full shadow-lg text-white font-medium ${
+        type === 'error' ? 'bg-red-500' : 'bg-green-500'
+      }`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // Page navigation
+    function showPage(pageId) {
+      document.querySelectorAll('.page-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      
+      const targetPage = document.getElementById('page-' + pageId);
+      if (targetPage) {
+        targetPage.classList.add('active');
+      }
+      
+      document.getElementById('mobile-menu').classList.add('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    }
+
+    function scrollToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    // Element SDK initialization
+    async function onConfigChange(newConfig) {
+      config = { ...defaultConfig, ...newConfig };
+      
+      document.getElementById('nav-shop-name').textContent = config.shop_name || defaultConfig.shop_name;
+      document.getElementById('footer-shop-name').textContent = config.shop_name || defaultConfig.shop_name;
+      
+      const heroTitle = document.getElementById('hero-title');
+      const titleText = config.hero_title || defaultConfig.hero_title;
+      const titleParts = titleText.split(' ');
+      if (titleParts.length > 2) {
+        heroTitle.innerHTML = titleParts.slice(0, 2).join(' ') + '<br><span class="bg-gradient-to-r from-pink-400 via-rose-400 to-orange-300 bg-clip-text text-transparent">' + titleParts.slice(2).join(' ') + '</span>';
+      } else {
+        heroTitle.textContent = titleText;
+      }
+      
+      document.getElementById('hero-subtitle').textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
+      
+      const ctaText = config.cta_text || defaultConfig.cta_text;
+      document.getElementById('cta-main').innerHTML = '🌷 ' + ctaText;
+      document.getElementById('cta-banner').innerHTML = '🌷 ' + ctaText + ' เลย!';
+      
+      document.body.style.background = `linear-gradient(135deg, ${config.background_color || defaultConfig.background_color} 0%, #FFF0F5 50%, #F5F0FF 100%)`;
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => {
+              config.background_color = value;
+              window.elementSdk.setConfig({ background_color: value });
+            }
+          },
+          {
+            get: () => config.surface_color || defaultConfig.surface_color,
+            set: (value) => {
+              config.surface_color = value;
+              window.elementSdk.setConfig({ surface_color: value });
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              window.elementSdk.setConfig({ text_color: value });
+            }
+          },
+          {
+            get: () => config.primary_action_color || defaultConfig.primary_action_color,
+            set: (value) => {
+              config.primary_action_color = value;
+              window.elementSdk.setConfig({ primary_action_color: value });
+            }
+          },
+          {
+            get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+            set: (value) => {
+              config.secondary_action_color = value;
+              window.elementSdk.setConfig({ secondary_action_color: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['shop_name', config.shop_name || defaultConfig.shop_name],
+        ['hero_title', config.hero_title || defaultConfig.hero_title],
+        ['hero_subtitle', config.hero_subtitle || defaultConfig.hero_subtitle],
+        ['cta_text', config.cta_text || defaultConfig.cta_text]
+      ]);
+    }
+
+    // Initialize SDKs
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    } else {
+      onConfigChange(defaultConfig);
+    }
+
+    initDataSdk();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c51080314737323',t:'MTc2OTYwODk4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
